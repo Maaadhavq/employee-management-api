@@ -127,7 +127,7 @@ dataclass) for the same reason.
 
 ```bash
 # 1. Clone and enter the project
-git clone <your-repo-url>
+git clone https://github.com/Maaadhavq/employee-management-api.git
 cd employee-management-api
 
 # 2. Create and activate a virtual environment
