@@ -283,12 +283,4 @@ Import **`postman_collection.json`** into Postman.
 
 ---
 
-## What's next
 
-This API is intentionally storage-agnostic to set up later weeks:
-
-- **Week 3 (Databases):** swap the JSON repository for PostgreSQL + SQLAlchemy —
-  only `repository/employee_repo.py` changes.
-- **Week 4 (AWS):** containerise and deploy behind a public endpoint.
-- **Week 6 (Advanced backend):** add JWT authentication, middleware, logging,
-  and rate limiting.
