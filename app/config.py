@@ -1,12 +1,15 @@
 """Application configuration.
 
 Centralises settings so they are not scattered as magic values across the
-codebase. In later weeks (e.g. when a real database is introduced) this is the
-natural place for connection strings, secrets loaded from the environment, etc.
+codebase.
 """
 
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+# Load .env file if present
+load_dotenv()
 
 # Project root: .../employee-management-api
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,12 +25,15 @@ class Settings:
         "validation and OpenAPI documentation."
     )
 
-    # Path to the JSON file used as a simple persistence layer for Week 2.
-    # The repository layer hides this detail, so it can be swapped for a real
-    # database (Week 3) without touching the rest of the application.
-    DATA_FILE: Path = Path(
-        os.getenv("EMPLOYEE_DATA_FILE", BASE_DIR / "data" / "employees.json")
+    DATABASE_URL: str = os.getenv(
+        "DATABASE_URL",
+        "postgresql://postgres:madhav@localhost:5432/employee_db"
     )
+    TEST_DATABASE_URL: str = os.getenv(
+        "TEST_DATABASE_URL",
+        "postgresql://postgres:madhav@localhost:5432/employee_test_db"
+    )
+    SQL_ECHO: bool = os.getenv("SQL_ECHO", "False").lower() in ("true", "1", "yes")
 
     # Default pagination size for list endpoints.
     DEFAULT_PAGE_SIZE: int = 20

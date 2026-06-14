@@ -1,20 +1,21 @@
 """Dependency providers.
 
 FastAPI's dependency-injection system wires these into the route handlers.
-Centralising construction here means the repository/service are created once
-and are trivial to swap out in tests (e.g. pointing at a temp data file).
 """
 
-from functools import lru_cache
+from fastapi import Depends
+from sqlalchemy.orm import Session
 
+from app.database import get_db
 from app.repository.employee_repo import EmployeeRepository
 from app.services.employee_service import EmployeeService
 
 
-@lru_cache
-def get_repository() -> EmployeeRepository:
-    return EmployeeRepository()
+def get_repository(db: Session = Depends(get_db)) -> EmployeeRepository:
+    return EmployeeRepository(db)
 
 
-def get_employee_service() -> EmployeeService:
-    return EmployeeService(get_repository())
+def get_employee_service(
+    repo: EmployeeRepository = Depends(get_repository),
+) -> EmployeeService:
+    return EmployeeService(repo)

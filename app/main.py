@@ -8,9 +8,11 @@ Run locally with:
 Then open http://127.0.0.1:8000/docs for the interactive Swagger UI.
 """
 
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from app.config import settings
+from app.database import init_db
 from app.exceptions import (
     DuplicateEmailError,
     EmployeeNotFoundError,
@@ -19,11 +21,20 @@ from app.exceptions import (
 )
 from app.routers import employees_router
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Initialize the database on startup (creates tables + seeds departments)
+    init_db()
+    yield
+
+
 app = FastAPI(
     title=settings.APP_NAME,
     version=settings.APP_VERSION,
     description=settings.APP_DESCRIPTION,
     contact={"name": "Madhav"},
+    lifespan=lifespan,
 )
 
 # Translate domain exceptions into clean HTTP responses.
