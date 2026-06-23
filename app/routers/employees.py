@@ -6,11 +6,12 @@ business logic lives here. The rich `responses=` metadata and docstrings feed
 directly into the Swagger UI at /docs.
 """
 
+from datetime import datetime, timezone
 from typing import Optional
 
-from fastapi import APIRouter, Depends, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 
-from app.dependencies import get_employee_service
+from app.dependencies import get_employee_service, get_s3_service
 from app.models.employee import Department, Employee
 from app.schemas.employee import (
     EmployeeCreate,
@@ -18,8 +19,14 @@ from app.schemas.employee import (
     EmployeePatch,
     EmployeeResponse,
     EmployeeUpdate,
+    ExportResponse,
 )
 from app.services.employee_service import EmployeeService
+from app.services.s3_service import (
+    S3NotConfiguredError,
+    S3Service,
+    S3UploadError,
+)
 
 router = APIRouter(prefix="/employees", tags=["Employees"])
 
@@ -91,6 +98,51 @@ def list_employees(
         page=page,
         page_size=page_size,
         items=items,
+    )
+
+
+@router.get(
+    "/export",
+    response_model=ExportResponse,
+    summary="Export all employees to a CSV stored in S3",
+    responses={
+        503: {"description": "S3 is not configured on this deployment"},
+        502: {"description": "Upload to S3 failed"},
+    },
+)
+def export_employees(
+    service: EmployeeService = Depends(get_employee_service),
+    s3: S3Service = Depends(get_s3_service),
+) -> ExportResponse:
+    """Generate a CSV of every employee, store it in S3, and return a
+    time-limited download link.
+
+    This exercises the full Week 4 cloud stack in one request: the EC2-hosted
+    API reads from RDS, writes an object to S3 using the instance's IAM role,
+    and hands back a presigned URL the client can use to download it directly.
+    Declared before `/{employee_id}` so the path is not captured as an id.
+    """
+    csv_content = service.build_employees_csv()
+    record_count = max(len(csv_content.strip().splitlines()) - 1, 0)
+    generated_at = datetime.now(timezone.utc)
+    key = f"exports/employees-{generated_at:%Y%m%dT%H%M%SZ}.csv"
+
+    try:
+        download_url = s3.upload_text(
+            content=csv_content, key=key, content_type="text/csv"
+        )
+    except S3NotConfiguredError as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
+    except S3UploadError as exc:
+        raise HTTPException(status_code=502, detail=str(exc)) from exc
+
+    return ExportResponse(
+        bucket=s3.bucket,
+        key=key,
+        record_count=record_count,
+        generated_at=generated_at.isoformat(),
+        download_url=download_url,
+        expires_in_seconds=s3.ttl,
     )
 
 

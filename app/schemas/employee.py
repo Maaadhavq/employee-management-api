@@ -103,3 +103,18 @@ class EmployeeListResponse(BaseModel):
     page: int = Field(description="Current page number (1-indexed).")
     page_size: int = Field(description="Requested page size.")
     items: list[EmployeeResponse]
+
+
+class ExportResponse(BaseModel):
+    """Result of exporting all employees to a CSV file stored in S3."""
+
+    bucket: str = Field(description="S3 bucket the export was written to.")
+    key: str = Field(description="Object key (path) of the export within the bucket.")
+    record_count: int = Field(description="Number of employees written to the file.")
+    generated_at: str = Field(description="UTC timestamp the export was generated.")
+    download_url: str = Field(
+        description="Time-limited presigned URL to download the CSV directly from S3."
+    )
+    expires_in_seconds: int = Field(
+        description="How long the download URL remains valid."
+    )

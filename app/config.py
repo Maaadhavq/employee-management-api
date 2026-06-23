@@ -35,9 +35,24 @@ class Settings:
     )
     SQL_ECHO: bool = os.getenv("SQL_ECHO", "False").lower() in ("true", "1", "yes")
 
+    # Deployment environment: "development" locally, "production" on AWS.
+    ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
+
+    # AWS / S3 settings (used by the employee-export feature in Week 4).
+    # On EC2 these credentials are supplied automatically by the attached IAM
+    # role, so AWS keys are deliberately NOT read from the environment here.
+    AWS_REGION: str = os.getenv("AWS_REGION", "ap-south-1")
+    S3_BUCKET_NAME: str = os.getenv("S3_BUCKET_NAME", "")
+    # How long (seconds) a generated export download link stays valid.
+    S3_PRESIGNED_URL_TTL: int = int(os.getenv("S3_PRESIGNED_URL_TTL", "3600"))
+
     # Default pagination size for list endpoints.
     DEFAULT_PAGE_SIZE: int = 20
     MAX_PAGE_SIZE: int = 100
+
+    @property
+    def is_production(self) -> bool:
+        return self.ENVIRONMENT.lower() == "production"
 
 
 settings = Settings()

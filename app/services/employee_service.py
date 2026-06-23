@@ -10,6 +10,8 @@ remains independent of the web framework.
 
 from __future__ import annotations
 
+import csv
+import io
 from typing import Optional
 
 from app.exceptions import DuplicateEmailError, EmployeeNotFoundError
@@ -65,6 +67,51 @@ class EmployeeService:
         start = (page - 1) * page_size
         end = start + page_size
         return employees[start:end], total
+
+    def build_employees_csv(self) -> str:
+        """Serialise every employee to a CSV document (returned as text).
+
+        Used by the export endpoint, which hands the result to the S3 service.
+        Column order and row ordering match the list endpoint for predictability.
+        """
+        employees = self._repo.list_all()
+        employees.sort(key=lambda e: e.name.lower())
+
+        buffer = io.StringIO()
+        writer = csv.writer(buffer)
+        writer.writerow(
+            [
+                "id",
+                "name",
+                "email",
+                "department",
+                "position",
+                "salary",
+                "is_active",
+                "created_at",
+                "updated_at",
+            ]
+        )
+        for e in employees:
+            department = (
+                e.department.value
+                if isinstance(e.department, Department)
+                else e.department
+            )
+            writer.writerow(
+                [
+                    e.id,
+                    e.name,
+                    e.email,
+                    department,
+                    e.position,
+                    e.salary,
+                    e.is_active,
+                    e.created_at,
+                    e.updated_at,
+                ]
+            )
+        return buffer.getvalue()
 
     # ----- commands ---------------------------------------------------------
 
