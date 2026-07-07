@@ -45,6 +45,12 @@ class Settings:
     S3_BUCKET_NAME: str = os.getenv("S3_BUCKET_NAME", "")
     # How long (seconds) a generated export download link stays valid.
     S3_PRESIGNED_URL_TTL: int = int(os.getenv("S3_PRESIGNED_URL_TTL", "3600"))
+    # JWT authentication settings (Week 6)
+    JWT_SECRET_KEY: str = os.getenv("JWT_SECRET_KEY", "")
+    JWT_ALGORITHM: str = os.getenv("JWT_ALGORITHM", "HS256")
+    JWT_EXPIRE_MINUTES: int = int(os.getenv("JWT_EXPIRE_MINUTES", "60"))
+
+
 
     # Default pagination size for list endpoints.
     DEFAULT_PAGE_SIZE: int = 20

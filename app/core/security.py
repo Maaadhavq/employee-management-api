@@ -1,0 +1,39 @@
+"""
+Week 6 addition: JWT + password hashing utilities.
+Deliberately deferred from Week 2 — now wired into the Employee
+Management API's auth flow (see app/routers/auth.py and app/api/deps.py).
+"""
+from datetime import datetime, timedelta, timezone
+from typing import Optional
+from jose import JWTError, jwt
+from passlib.context import CryptContext
+from app.config import settings
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+
+def hash_password(password: str) -> str:
+    return pwd_context.hash(password)
+
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return pwd_context.verify(plain_password, hashed_password)
+
+
+def create_access_token(subject: str, expires_minutes: Optional[int] = None) -> str:
+    expire = datetime.now(timezone.utc) + timedelta(
+        minutes=expires_minutes or settings.JWT_EXPIRE_MINUTES
+    )
+    to_encode = {"sub": subject, "exp": expire}
+    return jwt.encode(to_encode, settings.JWT_SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
+
+
+def decode_access_token(token: str) -> Optional[str]:
+    """Returns the username (subject) if the token is valid, else None."""
+    try:
+        payload = jwt.decode(
+            token, settings.JWT_SECRET_KEY, algorithms=[settings.JWT_ALGORITHM]
+        )
+        return payload.get("sub")
+    except JWTError:
+        return None
