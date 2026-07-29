@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-# Adjust to match your existing DB session dependency (Week 3 repo)
+# Adjust to match your existing DB session dependency
 from app.database import get_db
 from app.schemas.auth import UserCreate, UserOut, Token, LoginRequest
 from app.services import auth_service

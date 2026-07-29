@@ -1,7 +1,7 @@
 {
   "info": {
-    "name": "Week 6 - Auth & Analytics Additions",
-    "description": "Import this alongside your existing Week 2 Employee API collection. Set a collection variable {{base_url}} (e.g. http://localhost:8000 or your EC2 URL) and {{jwt_token}} (auto-filled by the Login request's test script).",
+    "name": "Auth & Analytics",
+    "description": "Import this alongside the Employee API collection. Set a collection variable {{base_url}} (e.g. http://localhost:8000 or your EC2 URL) and {{jwt_token}} (auto-filled by the Login request's test script).",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [

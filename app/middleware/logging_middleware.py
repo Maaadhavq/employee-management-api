@@ -1,5 +1,5 @@
 """
-Week 6 addition: request logging middleware.
+Request logging middleware.
 
 Logs every request/response with a short request ID and timing,
 and stamps the response with an X-Request-ID header for tracing.

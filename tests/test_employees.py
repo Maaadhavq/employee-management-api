@@ -1,7 +1,7 @@
 """End-to-end tests for the Employee Management API.
 
-Rewritten for the Week 3 PostgreSQL migration. The original 13 tests
-(from Week 2) were written against JSON-file storage and monkeypatched
+Rewritten for the PostgreSQL migration. An earlier set of tests were
+written against JSON-file storage and monkeypatched
 EMPLOYEE_DATA_FILE; that fixture no longer applies now that the
 repository is SQLAlchemy/Postgres-backed (app/database.py, get_db).
 

@@ -1,5 +1,5 @@
 """
-Week 6 addition: tests for the auth flow.
+Tests for the auth flow.
 
 Uses the shared in-memory SQLite test client from tests/conftest.py,
 so this file and test_employees.py don't fight over

@@ -1,7 +1,6 @@
 """
-Week 6 addition: repository layer for users, following the same
-router -> service -> repository -> model pattern established in
-Week 2 and used for the Postgres migration in Week 3.
+Repository layer for users, following the same
+router -> service -> repository -> model pattern used across the app.
 """
 
 from typing import Optional

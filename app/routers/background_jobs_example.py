@@ -1,11 +1,11 @@
 """
-Week 6 addition: background jobs example.
+Background jobs example.
 
 FastAPI's built-in BackgroundTasks is the lightest way to satisfy the
 "background jobs" curriculum topic without pulling in Celery/SQS —
 appropriate for a task like "export employees to S3 without blocking
 the request." For heavier/queued workloads later, Celery + Redis or
-SQS would be the natural next step (out of scope for Week 6).
+SQS would be the natural next step.
 
 Merge this pattern into your existing employee router.
 """

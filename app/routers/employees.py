@@ -117,7 +117,7 @@ def export_employees(
     """Generate a CSV of every employee, store it in S3, and return a
     time-limited download link.
 
-    This exercises the full Week 4 cloud stack in one request: the EC2-hosted
+    This exercises the full cloud stack in one request: the EC2-hosted
     API reads from RDS, writes an object to S3 using the instance's IAM role,
     and hands back a presigned URL the client can use to download it directly.
     Declared before `/{employee_id}` so the path is not captured as an id.

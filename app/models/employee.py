@@ -3,9 +3,9 @@
 This is the *domain* representation of an employee, deliberately kept separate
 from the Pydantic API schemas (`app/schemas`). The schemas describe what comes
 in and goes out over HTTP; this dataclass is what the application stores and
-reasons about internally. This is the OOP modelling from Week 1 carried forward
+reasons about internally. This is the domain OOP model carried forward
 into a backend service, and it is the layer that maps most directly onto a
-database table in Week 3.
+database table.
 """
 
 from __future__ import annotations

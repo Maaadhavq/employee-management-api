@@ -1,8 +1,8 @@
-# Employee Management REST API - Week 4
+# Employee Management REST API
 
-This is my Week 4 submission for the Employee Management API. This week I took the PostgreSQL-backed API from Week 3 and **deployed it to the cloud on AWS**, so it now runs on a real public URL instead of just `127.0.0.1` on my laptop. I also added a feature that exports all employee data to a CSV file stored in **Amazon S3**, which exercises the full cloud stack (EC2 + RDS + S3 + IAM) in a single request.
+A PostgreSQL-backed employee management API built with FastAPI and **deployed to AWS** on a real public URL. It includes an endpoint that exports all employee data to a CSV in **Amazon S3**, exercising the full cloud stack (EC2 + RDS + S3 + IAM) in a single request.
 
-## What's New This Week
+## Highlights
 * **Live on AWS**: The API runs on an **EC2** instance behind an **nginx** reverse proxy, with **Gunicorn** managing Uvicorn workers. It's kept alive by a **systemd** service so it restarts automatically.
 * **Managed Database**: PostgreSQL now runs on **Amazon RDS** instead of my local machine. The app picks this up through a single `DATABASE_URL` environment variable, so no code changed to make the swap.
 * **S3 CSV Export**: A new `GET /employees/export` endpoint reads every employee from RDS, writes a CSV to **S3**, and returns a time-limited presigned download link.
@@ -41,7 +41,7 @@ If S3 isn't configured (like when running locally without a bucket), the endpoin
 
 ## How to Run It Locally
 
-Nothing changed here from Week 3 — it still runs locally without any AWS setup.
+It runs locally without any AWS setup.
 
 1. **Install Dependencies**
    ```bash

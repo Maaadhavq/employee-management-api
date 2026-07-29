@@ -1,5 +1,5 @@
 """
-Week 6 addition: service layer for authentication logic.
+Service layer for authentication logic.
 """
 
 from typing import Optional

@@ -1,12 +1,12 @@
 """
-Week 6 addition: read-only analytics endpoints backed by the tables
+Read-only analytics endpoints backed by the tables
 the Sales ETL pipeline's PostgresDataSink writes into the shared
 RDS `analytics` schema. This is the integration point between the
 Employee Management API and the Sales ETL pipeline.
 
 Table names below (daily_sales_summary, product_performance,
 category_breakdown, regional_summary) are placeholders — rename to
-match your actual four aggregation tables from Week 5.
+match your actual four aggregation tables.
 """
 
 from fastapi import APIRouter, Depends

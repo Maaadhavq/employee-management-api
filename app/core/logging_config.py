@@ -1,5 +1,5 @@
 """
-Week 6 addition: centralized logging config.
+Centralized logging config.
 
 Call configure_logging() once, in main.py, before the FastAPI app
 is created.

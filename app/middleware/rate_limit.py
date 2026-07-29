@@ -1,5 +1,5 @@
 """
-Week 6 addition: rate limiting via slowapi (a FastAPI-friendly
+Rate limiting via slowapi (a FastAPI-friendly
 wrapper around the `limits` library).
 
 Wire into main.py:

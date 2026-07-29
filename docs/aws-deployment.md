@@ -1,4 +1,4 @@
-# AWS Deployment Runbook — Week 4
+# AWS Deployment Runbook
 
 Deploy the Employee Management API to AWS so it has a **real, shareable public URL** (no more `127.0.0.1`). Follow the steps in order; every command is copy-paste ready. Commands are labelled **PowerShell** (run on your Windows laptop) or **EC2 (Ubuntu)** (run after you SSH into the server).
 
@@ -29,13 +29,13 @@ See `docs/architecture-aws.png` for the full diagram.
 >
 > AWS replaced the old free tier on **July 15, 2025**. Because you're creating a **new** account, you are **not** on the "750 free hours of EC2/RDS" model that older tutorials describe. New accounts get a **credit-based plan**: **$100 in credits at sign-up**, up to **$100 more** for completing onboarding tasks. Every service draws down that balance.
 >
-> The good news for you: the table above totals ~$25/month, so the remaining weeks of your internship cost **well under your $100 credit** — there's no realistic way Week 4 exhausts it. And if you pick the **Free Plan** at sign-up, AWS **closes the account instead of charging you** when credits run out or 6 months pass. That makes accidental billing essentially impossible. (The 6-month auto-close is far past your 8-week internship, so it won't bite you — just don't treat the running demo as permanent.)
+> The good news: the table above totals ~$25/month, which stays **well under a $100 credit** — there's no realistic way it exhausts it. And if you pick the **Free Plan** at sign-up, AWS **closes the account instead of charging you** when credits run out or 6 months pass. That makes accidental billing essentially impossible. (Just don't treat the running demo as permanent.)
 >
 > **The charges that actually surprise people — avoid all four:**
 > 1. **NAT Gateway** — ~$32/month. This runbook never creates one. If a tutorial tells you to, don't.
 > 2. **Idle Elastic IP** — an *unattached* Elastic IP bills ~$3.65/month with **no free allowance**, forever, even after you delete everything else. **This runbook does not use an Elastic IP** (see Step 5) precisely to avoid this trap.
 > 3. **RDS Multi-AZ** — doubles the database cost. The Free-tier template keeps you Single-AZ; don't switch it on.
-> 4. **Leaving it all running after the demo** — see [Cost control & teardown](#cost-control--teardown). Stop/terminate once you're graded.
+> 4. **Leaving it all running after the demo** — see [Cost control & teardown](#cost-control--teardown). Stop/terminate once you're done.
 >
 > **Do Step 1's budget alarm first**, and watch your **credit balance** in the *Cost and Usage* widget on the console home page.
 
@@ -45,7 +45,7 @@ See `docs/architecture-aws.png` for the full diagram.
 
 - A credit/debit card (AWS requires one even for Free Tier).
 - Your repo pushed to GitHub: `https://github.com/Maaadhavq/employee-management-api`
-- The Week 4 code merged (branch `feature/aws-deployment`) — see the main README's deployment section.
+- The deployment code merged to your main branch — see the main README's deployment section.
 - About 2–3 focused hours for the first run.
 
 ---
@@ -53,7 +53,7 @@ See `docs/architecture-aws.png` for the full diagram.
 ## Step 1 — Create your AWS account + a budget alarm
 
 1. Sign up at <https://aws.amazon.com/> → **Create an AWS Account**.
-2. **At sign-up you'll be asked to choose a Free Plan or a Paid Plan. Choose the Free Plan.** On the Free Plan, AWS shuts the account down rather than billing you if you ever run past your credits — it's the strongest possible guard against accidental charges, and your Week 4 usage won't come close to the limit. (Already signed up? Check which plan you're on via the **Cost and Usage** widget on the console home page, or **Billing and Cost Management → Account**.)
+2. **At sign-up you'll be asked to choose a Free Plan or a Paid Plan. Choose the Free Plan.** On the Free Plan, AWS shuts the account down rather than billing you if you ever run past your credits — it's the strongest possible guard against accidental charges, and this usage won't come close to the limit. (Already signed up? Check which plan you're on via the **Cost and Usage** widget on the console home page, or **Billing and Cost Management → Account**.)
 3. Once in the console, set the region (top-right) to **Asia Pacific (Mumbai) ap-south-1** — closest to Chennai, lowest latency.
 4. Create a budget so you're warned early:
    - Search **Billing and Cost Management** → **Budgets** → **Create budget**.
@@ -132,7 +132,7 @@ This lets the EC2 instance write/read S3 **without any access keys in your code*
 7. **Advanced details** → **IAM instance profile** → select **`employee-api-ec2-role`**.
 8. **Launch instance**. Open the instance and note its **Public IPv4 address** (e.g. `13.234.x.x`).
 
-> 💡 **Skip the Elastic IP.** The instance already has an auto-assigned public IPv4 — use that. Allocating an Elastic IP adds another billable IP, and if you forget to **release** it at teardown it keeps charging ~$3.65/month forever (idle Elastic IPs have no free allowance — this is the single most common surprise bill). The only downside of skipping it: if you **stop and start** the instance the public IP changes, so just grab the new IP from the console and re-share the URL. For a graded demo you likely won't restart it anyway.
+> 💡 **Skip the Elastic IP.** The instance already has an auto-assigned public IPv4 — use that. Allocating an Elastic IP adds another billable IP, and if you forget to **release** it at teardown it keeps charging ~$3.65/month forever (idle Elastic IPs have no free allowance — this is the single most common surprise bill). The only downside of skipping it: if you **stop and start** the instance the public IP changes, so just grab the new IP from the console and re-share the URL. For a short-lived demo you likely won't restart it anyway.
 
 ---
 
@@ -199,7 +199,7 @@ All commands here run **on the EC2 box**.
 git clone https://github.com/Maaadhavq/employee-management-api.git
 cd employee-management-api
 
-# 2. If you haven't merged the Week 4 branch into main yet, deploy from it:
+# 2. If you haven't merged the deployment branch into main yet, deploy from it:
 git checkout feature/aws-deployment    # skip this line once it's merged to main
 
 # 3. Run the bootstrap: installs python venv + nginx, builds the venv,
@@ -274,13 +274,13 @@ If all five work, your EC2 + RDS + S3 + IAM chain is correct. 🎉
    - Condition: **Greater than 80** for **5 minutes**.
    - (Optional) Create an SNS topic with your email to get notified → **Create alarm**.
 
-> Optional/advanced: to ship the API's application logs to CloudWatch Logs, install the CloudWatch agent and point it at the journald unit. Not required for Week 4 — the metrics + alarm above cover the deliverable.
+> Optional/advanced: to ship the API's application logs to CloudWatch Logs, install the CloudWatch agent and point it at the journald unit. Not required here — the metrics + alarm above cover the basics.
 
 ---
 
-## Step 11 — Capture your deliverables
+## Step 11 — What you end up with
 
-For submission you need:
+You end up with:
 - **Public API URL**: `http://<your-ip>/docs` (the Swagger UI). Test it in an incognito window to confirm it's reachable from outside.
 - **Architecture diagram**: `docs/architecture-aws.png` (already in the repo).
 - **Screenshots** (nice to include): EC2 instance running, RDS available, the S3 `exports/` object, the CloudWatch alarm, and the Swagger UI loaded from the public IP.
@@ -289,9 +289,9 @@ For submission you need:
 
 ## Cost control & teardown
 
-**While being evaluated:** keep the EC2 instance and RDS database **running** so your mentor can hit the URL. (Since you skipped the Elastic IP, a stop/start would change the public IP — so just leave it up during the grading window rather than stopping it.)
+**While demoing:** keep the EC2 instance and RDS database **running** so others can hit the URL. (Since you skipped the Elastic IP, a stop/start would change the public IP — so just leave it up during the demo window rather than stopping it.)
 
-On the **Free Plan**, none of this *bills* you — it draws from your credits, and the account closes rather than charging if you somehow hit zero. But tearing down still conserves credits and is good habit, so once you're graded:
+On the **Free Plan**, none of this *bills* you — it draws from your credits, and the account closes rather than charging if you somehow hit zero. But tearing down still conserves credits and is good habit, so once you're done:
 
 **Teardown checklist (do all of these):**
 - **Terminate** the EC2 instance: EC2 → Instance state → **Terminate**. This also deletes its root EBS volume (delete-on-termination is on by default) and releases its public IPv4 — so compute, storage, and IP charges all stop.

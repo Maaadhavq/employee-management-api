@@ -1,7 +1,6 @@
 """
-Week 6 addition: JWT + password hashing utilities.
-Deliberately deferred from Week 2 — now wired into the Employee
-Management API's auth flow (see app/routers/auth.py and app/api/deps.py).
+JWT + password hashing utilities.
+Wired into the Employee Management API's auth flow (see app/routers/auth.py and app/api/deps.py).
 """
 from datetime import datetime, timedelta, timezone
 from typing import Optional

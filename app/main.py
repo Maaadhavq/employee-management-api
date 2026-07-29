@@ -46,11 +46,11 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# --- Week 6: rate limiting ---
+# --- rate limiting ---
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
-# --- Week 6: request logging middleware ---
+# --- request logging middleware ---
 app.add_middleware(RequestLoggingMiddleware)
 
 # Translate domain exceptions into clean HTTP responses.

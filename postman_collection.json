@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Employee Management API",
-    "description": "Week 2 deliverable - CRUD REST API for managing employees. Set the {{base_url}} collection variable (default http://127.0.0.1:8000). The 'Create Employee' request saves the new id into {{employee_id}} so the GET/PUT/PATCH/DELETE requests can reuse it.",
+    "description": "CRUD REST API for managing employees. Set the {{base_url}} collection variable (default http://127.0.0.1:8000). The 'Create Employee' request saves the new id into {{employee_id}} so the GET/PUT/PATCH/DELETE requests can reuse it.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [

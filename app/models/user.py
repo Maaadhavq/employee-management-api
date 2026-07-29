@@ -1,8 +1,7 @@
 """
-Week 6 addition: users table for JWT authentication.
+Users table for JWT authentication.
 
-Matches the SQLAlchemy 2.0 declarative style used in the Week 3
-Postgres migration (Mapped / mapped_column).
+Uses the SQLAlchemy 2.0 declarative style (Mapped / mapped_column).
 """
 
 from datetime import datetime
@@ -11,7 +10,7 @@ from sqlalchemy import String, DateTime, func
 from sqlalchemy.orm import Mapped, mapped_column
 
 # Adjust this import to match wherever your existing Base lives
-# (Week 3 repo: app/database.py or app/models/base.py)
+# (e.g. app/database.py or app/models/base.py)
 from app.database import Base
 
 
